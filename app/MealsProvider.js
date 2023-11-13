@@ -1,22 +1,28 @@
 'use client'
-import React, { useState } from "react";
-
+import React, { useState, createContext } from "react";
+export const MealsContext = createContext();
 const todaysMeals = [
     { id: 1, name: 'Baked Beans' },
     { id: 2, name: 'Baked Sweet Potatoes' },
     { id: 3, name: 'Baked Potatoes' },
 ]
 
-const MealsProvider = () => {
+const MealsProvider = ({ children }) => {
     const [meals, setMeals] = useState(todaysMeals);
 
-    const tickMeal = () => {
-
+    const tickMeal = (mealId) => {
+      setMeals((prevMeals) =>
+          prevMeals.map((meal) =>
+            meal.id === mealId ? { ...meal, ticked: !meal.ticked } : meal
+          )
+        );
     }
 
     return (
         <div>
-            
+            <MealsContext.Provider value={{ meals, tickMeal }}>
+              {children}
+            </MealsContext.Provider>
         </div>
     )
 };
